@@ -143,7 +143,7 @@ dialog > button:hover{
 	font:16px sans-serif;
 	margin-left:auto;
 	margin-right:auto;
-	position:absolute;
+	position:fixed;
 	background-color:white;
 	max-width:300px;
 	width:max-content;
@@ -430,7 +430,7 @@ function generate_bar_graph(){
 	return elem
 }
 async function new_game(){
-	let word_len = parseInt(document.getElementById("length-input").value)
+	let word_len = parseInt(document.getElementById("length-input").innerHTML)
 	if(word_len!=all_words.values().next().value?.length){
 		await fetch_all_words(word_len)
 	}
@@ -444,12 +444,20 @@ async function new_game(){
 	document.getElementById('guess-table').replaceChildren()
 	create_new_row()
 }
+function change_length(delta){
+	let input = document.getElementById("length-input")
+	let length = parseInt(input.innerHTML)
+	length += delta
+	length = Math.max(1, length)
+	input.innerHTML = length
+}
+
 function open_stats(){
 	document.getElementById('bar-graph-container').replaceChildren(generate_bar_graph())
 	document.getElementById('stats').showModal()
 }
 window.addEventListener("load",(event)=>{
-	create_new_row(parseInt(document.getElementById("length-input").value))
+	create_new_row(parseInt(document.getElementById("length-input").innerHTML))
 	build_keyboard()
 	new_game()
 })
@@ -463,7 +471,12 @@ window.addEventListener("load",(event)=>{
 	</nav>
 	<dialog id="settings">
 		<form method="dialog" align="right"  autofocus><input type="submit" value="✖"></form><br>
-		<input id="length-input" type="number" value="5" min="1" max="99" onkeydown="return false" autocomplete="off"><span>Word Length</span><br>
+		<span style="user-select:none;">
+			<button type="button" onclick="change_length(-1)">-</button>
+			<span id="length-input">5</span>
+			<button type="button" onclick="change_length(1)">+</button>
+		</span>
+		<span>Word Length</span><br>
 		<button type="button" onclick="alert(random_valid_guess())">Cheat (show 1 word)</button><br>
 		<button type="button" onclick="alert(all_valid_guesses().join(' '))">Cheat (show all words)</button><br>
 		<button type="button" onclick="new_game();for(let elem of document.getElementsByTagName('dialog')) elem.close()">New game</button>

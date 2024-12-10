@@ -1,0 +1,3 @@
+This is a knock off of [Wordle](https://www.nytimes.com/games/wordle/index.html) where you're trying to avoid guessing the correct word. Of course you can only guess words that might be the right answer.
+
+There is not just 1 word chosen each day, it just randomly chooses a word and you can play as often as you want. You can also use words of lengths other than 5. Sometimes it chooses words I have never heard of before so I added a feature to show all the possible words that the solution could be.
